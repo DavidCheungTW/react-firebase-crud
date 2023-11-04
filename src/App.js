@@ -8,7 +8,7 @@ function App() {
   const [todoItem, setTodoItem] = useState("");
   const [todos, setTodos] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
-  const [tempUuid, setTempUuid] = useState("");
+  // const [tempUuid, setTempUuid] = useState("");
   const [message, setMessage] = useState("");
 
   const handleTodoChange = (e) => {
@@ -52,11 +52,11 @@ function App() {
   };
 
   //update
-  const handleUpdate = (todo) => {
-    setIsEdit(true);
-    setTempUuid(todo.uuid);
-    setTodoItem(todo.todoItem);
-  };
+  // const handleUpdate = (todo) => {
+  //   setIsEdit(true);
+  //   setTempUuid(todo.uuid);
+  //   setTodoItem(todo.todoItem);
+  // };
 
   //next
   const handleNext = (todo) => {
@@ -74,21 +74,21 @@ function App() {
     setTodoItem("");
   };
 
-  const handleSubmitChange = () => {
-    update(ref(db, `/${tempUuid}`), {
-      todoItem: todoItem,
-      uuid: tempUuid,
-    });
-    setTodoItem("");
-    setIsEdit(false);
-  };
+  // const handleSubmitChange = () => {
+  //   update(ref(db, `/${tempUuid}`), {
+  //     todoItem: todoItem,
+  //     uuid: tempUuid,
+  //   });
+  //   setTodoItem("");
+  //   setIsEdit(false);
+  // };
 
   return (
     <div className="App">
       <input type="text" value={todoItem} onChange={handleTodoChange} />
       {isEdit ? (
         <>
-          <button onClick={handleSubmitChange}>Submit Change</button>
+          {/* <button onClick={handleSubmitChange}>Submit Change</button> */}
           <button
             onClick={() => {
               setIsEdit(false);
