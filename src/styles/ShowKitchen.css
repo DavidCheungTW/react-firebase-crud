@@ -1,0 +1,18 @@
+.show-kitchen {
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bolder;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+button {
+  height: 30px;
+  width: 80px;
+  border-radius: 15px;
+  font-size: 20px;
+}
+
+button:hover {
+  color: white;
+  background-color: darkcyan;
+}

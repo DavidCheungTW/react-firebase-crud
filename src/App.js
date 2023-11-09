@@ -3,13 +3,20 @@ import { db } from "./firebase";
 import { uid } from "uid";
 import { set, ref, onValue, remove, update } from "firebase/database";
 import { useState, useEffect } from "react";
+import ShowCashier from "./components/ShowCashier";
+import ShowKitchen from "./components/ShowKitchen";
+import ShowFrontdesk from "./components/ShowFrontdesk";
+import ShowBigtv from "./components/ShowBigtv";
 
 function App() {
   const [todoItem, setTodoItem] = useState("");
   const [todos, setTodos] = useState([]);
-  const [isEdit, setIsEdit] = useState(false);
-  // const [tempUuid, setTempUuid] = useState("");
   const [message, setMessage] = useState("");
+  const [location, setLocation] = useState("bigtv");
+
+  const handleRadioChange = (event) => {
+    setLocation(event.target.value);
+  };
 
   const handleTodoChange = (e) => {
     setTodoItem(e.target.value);
@@ -17,17 +24,21 @@ function App() {
 
   //write
   const writeToDatabase = () => {
-    if (todoItem === "") {
-      setMessage("Please entry your item!");
-      return;
-    }
+    const randNum = Math.floor(Math.random() * 899) + 100;
+
+    console.log("randNum=", randNum);
+
+    // if (todoItem === "") {
+    //   setMessage("Please entry your item!");
+    //   return;
+    // }
 
     const uuid = uid();
     set(ref(db, `/${uuid}`), {
-      todoItem: todoItem,
+      // todoItem: todoItem,
+      todoItem: randNum,
       uuid: uuid,
       orderStatus: "placed",
-      //  can add more fields, e.g.  complete:false,
     });
     setTodoItem("");
     setMessage("");
@@ -40,25 +51,29 @@ function App() {
       const data = snapshot.val();
       if (data !== null) {
         Object.values(data).map((todo) => {
-          setTodos((oldArray) => [...oldArray, todo]);
+          if (location === "kitchen" && todo.orderStatus === "placed") {
+            console.log("...", todo.orderStatus);
+            setTodos((oldArray) => [...oldArray, todo]);
+          }
+          if (location === "frontdesk" && todo.orderStatus === "cooked") {
+            setTodos((oldArray) => [...oldArray, todo]);
+          }
+          if (
+            location === "bigtv" &&
+            (todo.orderStatus === "placed" || todo.orderStatus === "cooked")
+          ) {
+            setTodos((oldArray) => [...oldArray, todo]);
+          }
         });
       }
     });
-  }, []);
+  }, [location]);
 
   //delete
   const handleDelete = (todo) => {
     remove(ref(db, `/${todo.uuid}`));
   };
 
-  //update
-  // const handleUpdate = (todo) => {
-  //   setIsEdit(true);
-  //   setTempUuid(todo.uuid);
-  //   setTodoItem(todo.todoItem);
-  // };
-
-  //next
   const handleNext = (todo) => {
     let newStatus = todo.orderStatus;
     if (newStatus === "placed") {
@@ -74,46 +89,80 @@ function App() {
     setTodoItem("");
   };
 
-  // const handleSubmitChange = () => {
-  //   update(ref(db, `/${tempUuid}`), {
-  //     todoItem: todoItem,
-  //     uuid: tempUuid,
-  //   });
-  //   setTodoItem("");
-  //   setIsEdit(false);
-  // };
-
   return (
     <div className="App">
-      <input type="text" value={todoItem} onChange={handleTodoChange} />
-      {isEdit ? (
-        <>
-          {/* <button onClick={handleSubmitChange}>Submit Change</button> */}
-          <button
-            onClick={() => {
-              setIsEdit(false);
-              setTodoItem("");
-            }}
-          >
-            X
-          </button>
-        </>
-      ) : (
-        <button onClick={writeToDatabase}>checkout!</button>
-      )}
+      <div className="header">Welcome to Family Food Store</div>
+      <div className="main-body">
+        {location === "cashier" && (
+          <ShowCashier
+            location={location}
+            todoItem={todoItem}
+            handleTodoChange={handleTodoChange}
+            writeToDatabase={writeToDatabase}
+          />
+        )}
+        {location === "kitchen" && (
+          <ShowKitchen
+            todos={todos}
+            handleDelete={handleDelete}
+            handleNext={handleNext}
+          />
+        )}
+        {location === "frontdesk" && (
+          <ShowFrontdesk
+            todos={todos}
+            handleDelete={handleDelete}
+            handleNext={handleNext}
+          />
+        )}
+        {location === "bigtv" && (
+          <ShowBigtv
+            todos={todos}
+            handleDelete={handleDelete}
+            handleNext={handleNext}
+          />
+        )}
+      </div>
+      <div className="footer">
+        <div className="select-location">
+          <label htmlFor="current-location">{location} : </label>
+          <input
+            type="radio"
+            name="location"
+            value="cashier"
+            id="cashier"
+            onChange={handleRadioChange}
+          />
+          <label htmlFor="cashier">Cashier</label>
+          <input
+            type="radio"
+            name="location"
+            value="kitchen"
+            id="kitchen"
+            onChange={handleRadioChange}
+          />
+          <label htmlFor="kitchen">Kitchen</label>
+          <input
+            type="radio"
+            name="location"
+            value="frontdesk"
+            id="frontdesk"
+            onChange={handleRadioChange}
+          />
+          <label htmlFor="frontdesk">Front Desk</label>
+          <input
+            type="radio"
+            name="location"
+            value="bigtv"
+            id="bigtv"
+            checked={location === "bigtv"}
+            onChange={handleRadioChange}
+          />
+          <label htmlFor="bigtv">Big TV</label>
+        </div>
+      </div>
 
-      {todos.map((todo) => (
-        <>
-          <h1>
-            {todo.todoItem} : {todo.orderStatus}
-          </h1>
-
-          {/* <button onClick={() => handleUpdate(todo)}>update</button> */}
-          <button onClick={() => handleDelete(todo)}>delete</button>
-          <button onClick={() => handleNext(todo)}>next</button>
-        </>
-      ))}
-      {message && <p>{message}</p>}
+      {/* {message && <p>{message}</p>} */}
     </div>
   );
 }

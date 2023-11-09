@@ -1,5 +1,26 @@
 .App {
-  /* text-align: center; */
+  text-align: center;
+  /* background-color: yellow; */
+}
+
+.header {
+  font-size: 12px;
+  background-color: rgb(55, 199, 55);
+  color: white;
+  height: 30px;
+}
+
+.main-body {
+  /* background-color: lightblue; */
+  display: block;
+  height: 300px;
+}
+
+.footer {
+  font-size: 12px;
+  background-color: black;
+  color: white;
+  height: 30px;
 }
 
 .App-logo {

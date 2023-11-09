@@ -1,0 +1,42 @@
+ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  /* justify-content: center; */
+  /* justify-content: space-around; */
+  height: 250px;
+}
+
+.heading1 {
+  display: block;
+  color: white;
+  background-color: blue;
+}
+
+.heading2 {
+  display: block;
+  color: white;
+  background-color: green;
+}
+
+li {
+  flex-basis: 30%;
+  text-align: left;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bolder;
+  list-style-type: none;
+}
+
+.column-3 {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.footer {
+  font-size: 12px;
+  background-color: black;
+  color: white;
+  height: 30px;
+}

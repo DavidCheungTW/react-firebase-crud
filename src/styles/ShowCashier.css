@@ -1,0 +1,16 @@
+.show-cashier {
+  display: flex;
+  flex-direction: column;
+  border: 5x solid red;
+  align-items: center;
+}
+
+.btn-cashier {
+  width: 170px;
+  border-radius: 15px;
+}
+
+.btn-cashier:hover {
+  color: white;
+  background-color: darkcyan;
+}
