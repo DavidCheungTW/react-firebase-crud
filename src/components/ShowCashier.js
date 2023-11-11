@@ -10,8 +10,8 @@ const ShowCashier = ({
 }) => {
   return (
     <div className="show-cashier">
-      <img src={menuScreen} alt="menu-screen" height={250} width={170} />
-      {/* <input type="text" value={todoItem} onChange={handleTodoChange} /> */}
+      {/* <img src={menuScreen} alt="menu-screen" height={250} width={170} /> */}
+      <input type="text" value={todoItem} onChange={handleTodoChange} />
       <button className="btn-cashier" onClick={writeToDatabase}>
         {" "}
         Comfirm{" "}

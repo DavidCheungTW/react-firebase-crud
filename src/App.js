@@ -24,19 +24,19 @@ function App() {
 
   //write
   const writeToDatabase = () => {
-    const randNum = Math.floor(Math.random() * 899) + 100;
+    // const randNum = Math.floor(Math.random() * 899) + 100;
 
-    console.log("randNum=", randNum);
+    // console.log("randNum=", randNum);
 
-    // if (todoItem === "") {
-    //   setMessage("Please entry your item!");
-    //   return;
-    // }
+    if (todoItem === "") {
+      setMessage("Please entry your item!");
+      return;
+    }
 
     const uuid = uid();
     set(ref(db, `/${uuid}`), {
-      // todoItem: todoItem,
-      todoItem: randNum,
+      todoItem: todoItem,
+      // todoItem: randNum,
       uuid: uuid,
       orderStatus: "placed",
     });
