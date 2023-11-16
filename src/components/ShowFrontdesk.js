@@ -10,7 +10,10 @@ const ShowFrontdesk = ({ todos, handleDelete, handleNext }) => {
             {todo.todoItem} : {todo.orderStatus}
           </h5> */}
           {/* <button onClick={() => handleDelete(todo)}>delete</button> */}
-          {todo.todoItem} <button onClick={() => handleNext(todo)}> OK </button>
+          <button className="btn-frontdesk" onClick={() => handleNext(todo)}>
+            {" "}
+            {todo.todoItem}{" "}
+          </button>
         </div>
       ))}
     </div>

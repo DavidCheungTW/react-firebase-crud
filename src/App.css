@@ -8,6 +8,8 @@
   background-color: rgb(55, 199, 55);
   color: white;
   height: 30px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .main-body {

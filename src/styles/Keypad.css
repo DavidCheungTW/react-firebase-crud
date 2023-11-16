@@ -1,0 +1,14 @@
+.keypad {
+  border-color: 2px solid red;
+  display: flex;
+  flex-wrap: wrap;
+  width: 240px;
+}
+
+.keyButton {
+  border-color: 2px solid blue;
+  border-radius: 0ch;
+  display: block;
+  height: 50px;
+  width: 80px;
+}

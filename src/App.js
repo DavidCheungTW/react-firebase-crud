@@ -7,16 +7,22 @@ import ShowCashier from "./components/ShowCashier";
 import ShowKitchen from "./components/ShowKitchen";
 import ShowFrontdesk from "./components/ShowFrontdesk";
 import ShowBigtv from "./components/ShowBigtv";
+import Login from "./components/Login";
 
 function App() {
   const [todoItem, setTodoItem] = useState("");
   const [todos, setTodos] = useState([]);
   const [message, setMessage] = useState("");
-  const [location, setLocation] = useState("bigtv");
+  // const [location, setLocation] = useState("bigtv");
+  const [username, setUsername] = useState("");
 
-  const handleRadioChange = (event) => {
-    setLocation(event.target.value);
+  const handleReset = () => {
+    setUsername("");
   };
+
+  // const handleRadioChange = (event) => {
+  //   setLocation(event.target.value);
+  // };
 
   const handleTodoChange = (e) => {
     setTodoItem(e.target.value);
@@ -24,19 +30,17 @@ function App() {
 
   //write
   const writeToDatabase = () => {
-    // const randNum = Math.floor(Math.random() * 899) + 100;
+    const randNum = Math.floor(Math.random() * 899) + 100;
 
-    // console.log("randNum=", randNum);
-
-    if (todoItem === "") {
-      setMessage("Please entry your item!");
-      return;
-    }
+    // if (todoItem === "") {
+    //   setMessage("Please entry your item!");
+    //   return;
+    // }
 
     const uuid = uid();
     set(ref(db, `/${uuid}`), {
-      todoItem: todoItem,
-      // todoItem: randNum,
+      // todoItem: todoItem,
+      todoItem: randNum,
       uuid: uuid,
       orderStatus: "placed",
     });
@@ -51,15 +55,15 @@ function App() {
       const data = snapshot.val();
       if (data !== null) {
         Object.values(data).map((todo) => {
-          if (location === "kitchen" && todo.orderStatus === "placed") {
+          if (username === "kitchen" && todo.orderStatus === "placed") {
             console.log("...", todo.orderStatus);
             setTodos((oldArray) => [...oldArray, todo]);
           }
-          if (location === "frontdesk" && todo.orderStatus === "cooked") {
+          if (username === "frontdesk" && todo.orderStatus === "cooked") {
             setTodos((oldArray) => [...oldArray, todo]);
           }
           if (
-            location === "bigtv" &&
+            username === "bigtv" &&
             (todo.orderStatus === "placed" || todo.orderStatus === "cooked")
           ) {
             setTodos((oldArray) => [...oldArray, todo]);
@@ -67,7 +71,7 @@ function App() {
         });
       }
     });
-  }, [location]);
+  }, [username]);
 
   //delete
   const handleDelete = (todo) => {
@@ -91,40 +95,59 @@ function App() {
 
   return (
     <div className="App">
-      <div className="header">Welcome to Family Food Store</div>
-      <div className="main-body">
-        {location === "cashier" && (
-          <ShowCashier
-            location={location}
-            todoItem={todoItem}
-            handleTodoChange={handleTodoChange}
-            writeToDatabase={writeToDatabase}
-          />
-        )}
-        {location === "kitchen" && (
-          <ShowKitchen
-            todos={todos}
-            handleDelete={handleDelete}
-            handleNext={handleNext}
-          />
-        )}
-        {location === "frontdesk" && (
-          <ShowFrontdesk
-            todos={todos}
-            handleDelete={handleDelete}
-            handleNext={handleNext}
-          />
-        )}
-        {location === "bigtv" && (
-          <ShowBigtv
-            todos={todos}
-            handleDelete={handleDelete}
-            handleNext={handleNext}
-          />
+      <div className="header">
+        <p>Welcome to Family Food Store</p>
+        {username && (
+          <>
+            <button
+              onClick={() => {
+                handleReset();
+              }}
+            >
+              X
+            </button>
+          </>
         )}
       </div>
-      <div className="footer">
-        <div className="select-location">
+
+      {username && (
+        <>
+          <div className="main-body">
+            {username === "cashier" && (
+              <ShowCashier
+                location={username}
+                todoItem={todoItem}
+                handleTodoChange={handleTodoChange}
+                writeToDatabase={writeToDatabase}
+              />
+            )}
+            {username === "kitchen" && (
+              <ShowKitchen
+                todos={todos}
+                handleDelete={handleDelete}
+                handleNext={handleNext}
+              />
+            )}
+            {username === "frontdesk" && (
+              <ShowFrontdesk
+                todos={todos}
+                handleDelete={handleDelete}
+                handleNext={handleNext}
+              />
+            )}
+            {username === "bigtv" && (
+              <ShowBigtv
+                todos={todos}
+                handleDelete={handleDelete}
+                handleNext={handleNext}
+              />
+            )}
+          </div>
+        </>
+      )}
+
+      {/* <div className="footer"> */}
+      {/* <div className="select-location">
           <label htmlFor="current-location">{location} : </label>
           <input
             type="radio"
@@ -158,9 +181,15 @@ function App() {
             checked={location === "bigtv"}
             onChange={handleRadioChange}
           />
-          <label htmlFor="bigtv">Big TV</label>
-        </div>
-      </div>
+          <label htmlFor="bigtv">Big TV</label> 
+        </div> */}
+      {/* </div> */}
+
+      {!username && (
+        <>
+          <Login setUsername={setUsername} />
+        </>
+      )}
 
       {/* {message && <p>{message}</p>} */}
     </div>
